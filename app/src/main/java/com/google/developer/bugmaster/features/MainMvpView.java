@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MainMvpView extends MvpView {
 
-
     void showInsects(List<Insect> allInsect);
+
 }

@@ -3,9 +3,9 @@ package com.google.developer.bugmaster.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 
 import com.google.developer.bugmaster.R;
 
@@ -17,46 +17,36 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StreamCorruptedException;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Database helper class to facilitate creating and updating
- * the database from the chosen schema.
- */
 public class BugsDbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = BugsDbHelper.class.getSimpleName();
     private List<Insect> insects;
 
+    private static final String DATABASE_NAME = "insects_db";
+    private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_NAME = "insects.db";
-    private static final int DATABASE_VERSION = 2;
-    static final String TABLE_NAME = "bugs";
-
-    //Used to read data from res/ and assets/
     private Resources mResources;
 
     public BugsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
         mResources = context.getResources();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //TODO: Create and fill the database
-        db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
-                + "_id INTEGER PRIMARY KEY,"
-                + "commonName TEXT"
-                + "scientificName TEXT"
-                + "classification TEXT"
-                + "image TEXT"
-                + "dangerLevel INTEGER"
+
+        db.execSQL("CREATE TABLE "
+                + BugsDbContract.bugsEntry.TABLE_NAME + " ("
+                + BugsDbContract.bugsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME + " TEXT, "
+                + BugsDbContract.bugsEntry.COLUMN_NAME_SCIENTIFIC_NAME + " TEXT, "
+                + BugsDbContract.bugsEntry.COLUMN_NAME_CLASSIFICATION + " TEXT, "
+                + BugsDbContract.bugsEntry.COLUMN_NAME_IMAGE + " TEXT, "
+                + BugsDbContract.bugsEntry.COLUMN_NAME_DANGER_LEVEL + " INTEGER "
                 + ");");
-
-
 
         try {
 
@@ -68,7 +58,6 @@ public class BugsDbHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-
     }
 
     @Override
@@ -77,14 +66,6 @@ public class BugsDbHelper extends SQLiteOpenHelper {
         int f = 0;
     }
 
-    /**
-     * Streams the JSON data from insect.json, parses it, and inserts it into the
-     * provided {@link SQLiteDatabase}.
-     *
-     * @param db Database where objects should be inserted.
-     * @throws IOException
-     * @throws JSONException
-     */
     private void readInsectsFromResources(SQLiteDatabase db) throws IOException, JSONException {
 
         StringBuilder builder = new StringBuilder();
@@ -102,45 +83,76 @@ public class BugsDbHelper extends SQLiteOpenHelper {
         //Parse resource into key/values
         final String rawJson = builder.toString();
         //TODO: Parse JSON data and insert into the provided database instance
+        new LoadBugsFromTask().execute(rawJson);
 
-        //MyCod------------------------------------***
-        JSONObject jObject = new JSONObject(rawJson);
-        JSONArray jArray = jObject.getJSONArray("insects");
-        String friendlyName = "";
-        String scientificName = "";
-        String classification = "";
-        String imageAsset = "";
-        int dangerLevel = 0;
+    }
 
-        insects = new ArrayList<>();
+    private class LoadBugsFromTask extends AsyncTask<String,Void, Void> {
 
-        for (int i = 0; i < jArray.length(); i++) {
-            friendlyName = jArray.getJSONObject(i).getString("friendlyName");
-            scientificName = jArray.getJSONObject(i).getString("scientificName");
-            classification = jArray.getJSONObject(i).getString("classification");
-            imageAsset = jArray.getJSONObject(i).getString("imageAsset");
-            dangerLevel = jArray.getJSONObject(i).getInt("dangerLevel");
+        @Override
+        protected Void doInBackground(String... params) {
 
-            insects.add(new Insect(friendlyName, scientificName, classification, imageAsset, dangerLevel));
+            JSONArray jArray = null;
+            JSONObject jObject = null;
+            JSONObject currentObject;
 
+            try {
+
+                jObject = new JSONObject(params[0]);
+                jArray = jObject.getJSONArray("insects");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String friendlyName;
+            String scientificName;
+            String classification;
+            String imageAsset;
+            int dangerLevel;
+
+            if(jArray != null) {
+                for (int i = 0; i < jArray.length(); i++) {
+
+                    try {
+
+                        currentObject = jArray.getJSONObject(i);
+
+                        friendlyName = currentObject.getString("friendlyName");
+                        scientificName = currentObject.getString("scientificName");
+                        classification = currentObject.getString("classification");
+                        imageAsset = currentObject.getString("imageAsset");
+                        dangerLevel = currentObject.getInt("dangerLevel");
+
+                        ContentValues cv = new ContentValues();
+
+                        cv.put(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME, friendlyName);
+                        cv.put(BugsDbContract.bugsEntry.COLUMN_NAME_SCIENTIFIC_NAME, scientificName);
+                        cv.put(BugsDbContract.bugsEntry.COLUMN_NAME_CLASSIFICATION, classification);
+                        cv.put(BugsDbContract.bugsEntry.COLUMN_NAME_IMAGE, imageAsset);
+                        cv.put(BugsDbContract.bugsEntry.COLUMN_NAME_DANGER_LEVEL, dangerLevel);
+
+                        SQLiteDatabase db = getWritableDatabase();
+
+                        db.insert(BugsDbContract.bugsEntry.TABLE_NAME, null, cv);
+
+                        db.close();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
 
-        for (int i = 0; i < insects.size(); i++) {
-            ContentValues cv = new ContentValues();
-            cv.put("friendlyName", insects.get(i).getName());
-            cv.put("scientificName", insects.get(i).getScientificName());
-            cv.put("classification", insects.get(i).getClassification());
-            cv.put("imageAsset", insects.get(i).getImageAsset());
-            cv.put("dangerLevel", insects.get(i).getDangerLevel());
-
-            db.insert(TABLE_NAME, null, cv);
         }
-//        db.close();
-
-
-        //MyCod-------------------------------------------***
-
     }
 
 }

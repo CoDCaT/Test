@@ -15,7 +15,8 @@ public class MainActivityPresenter<V extends MainMvpView> extends BasePresenter<
         dataManager = DataManager.getInstance((Context) mMvpView);
     }
 
-    @Override public void onViewInitialized() {
-//        getMvpView().showInsects(dataManager.getAllInsect(null));
+    @Override
+    public void onViewInitialized(String sort) {
+        getMvpView().showInsects(dataManager.getAllInsect(sort));
     }
 }

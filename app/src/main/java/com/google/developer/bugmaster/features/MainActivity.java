@@ -1,10 +1,8 @@
 package com.google.developer.bugmaster.features;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -16,15 +14,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.developer.bugmaster.QuizActivity;
 import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.SettingsActivity;
-import com.google.developer.bugmaster.data.BugsDbHelper;
+import com.google.developer.bugmaster.data.BugsDbContract;
 import com.google.developer.bugmaster.data.DataManager;
 import com.google.developer.bugmaster.data.Insect;
 import com.google.developer.bugmaster.data.MyAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PrimitiveIterator;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
     private List<Insect> insects;
     private MainActivityPresenter<MainMvpView> mPresenter;
     private MyAdapter adapter;
+    private String sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME;
+    private String sortBy = BugsDbContract.bugsEntry.SORT_BY_ASC;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView rvInsects;
@@ -62,6 +65,16 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
         switch (item.getItemId()) {
             case R.id.action_sort:
                 //TODO: Implement the sort action
+                if (sortOrder.equals(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME)) {
+                    sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_DANGER_LEVEL;
+                    sortBy = BugsDbContract.bugsEntry.SORT_BY_DESC;
+                }else {
+                    sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME;
+                    sortBy = BugsDbContract.bugsEntry.SORT_BY_ASC;
+                }
+
+                mPresenter.onViewInitialized(sortOrder + sortBy);
+
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -72,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
         }
     }
 
+    //init------------------------------------------------****
 
     private void attachPresenter() {
         mPresenter = new MainActivityPresenter<>(this);
@@ -84,9 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
         setFloatingActionButton();
         setRecyclerViewInsects();
 
-        dbTest();
-
-        mPresenter.onViewInitialized();
+        mPresenter.onViewInitialized(sortOrder + sortBy);
     }
 
     private void setRecyclerViewInsects() {
@@ -97,7 +109,28 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
     }
 
     private void setFloatingActionButton() {
-        fab.setOnClickListener(v -> Log.d("ff", "LOGTAG"));
+
+        fab.setOnClickListener(v -> {
+
+            ArrayList<Insect> insects = (ArrayList<Insect>) adapter.getInsects();
+
+            int insectCount = insects.size();
+            Random rnd = new Random();
+            int rndNum;
+            ArrayList<Insect> insectArrayList = new ArrayList<>(QuizActivity.ANSWER_COUNT);
+            Insect insect;
+            for(int i = 0; i < QuizActivity.ANSWER_COUNT; i++) {
+                rndNum = rnd.nextInt(insectCount);
+                insect = insects.get(rndNum);
+                insectArrayList.add(insect);
+            }
+
+            Intent intent = new Intent(this, QuizActivity.class);
+
+            intent.putExtra(QuizActivity.EXTRA_INSECTS, insectArrayList);
+            intent.putExtra(QuizActivity.EXTRA_ANSWER, insectArrayList.get(rnd.nextInt(QuizActivity.ANSWER_COUNT)));
+            startActivity(intent);
+        });
 
     }
 
@@ -105,32 +138,8 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
         setSupportActionBar(toolbar);
     }
 
-    private List<Insect> getInsectData() {
-        DataManager dataManager = DataManager.getInstance(this);
-        insects = dataManager.getAllInsect(null);
 
-
-//        if (c.moveToFirst()) {
-//
-//            int friendlyName = c.getColumnIndex("friendlyName");
-//            int scientificName = c.getColumnIndex("scientificName");
-//            int classification = c.getColumnIndex("classification");
-//            int imageAsset = c.getColumnIndex("imageAsset");
-//            int dangerLevel = c.getColumnIndex("dangerLevel");
-//
-//            do {
-//
-//                insects.add(new Insect(c.getString(friendlyName), c.getString(scientificName), c.getString(classification), c.getString(imageAsset), c.getInt(dangerLevel)));
-//
-//            } while (c.moveToNext());
-//        } else {
-//
-//        }
-//
-//        c.close();
-
-        return insects;
-    }
+    //MVP ---------------------------------------------------****
 
     @Override public boolean isNetworkConnected() {
         return false;
@@ -153,47 +162,8 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
     }
 
     @Override public void showInsects(List<Insect> allInsect) {
-//        adapter.setInsects(allInsect);
-//        adapter.notifyDataSetChanged();
+        adapter.setInsects(allInsect);
+        adapter.notifyDataSetChanged();
     }
 
-    private void dbTest(){
-
-        BugsDbHelper bugsDbHelper = new BugsDbHelper(this);
-        SQLiteDatabase db = bugsDbHelper.getWritableDatabase();
-
-//        ContentValues cv = new ContentValues();
-//        cv.put("friendlyName", "1");
-//        cv.put("scientificName", "2");
-//        cv.put("classification", "3");
-//        cv.put("imageAsset", "4");
-//        cv.put("dangerLevel", "5");
-//
-//        db.insert("bugs", null, cv);
-
-        Cursor c = db.query("bugs", null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            insects = new ArrayList<>();
-            int friendlyName = c.getColumnIndex("friendlyName");
-            int scientificName = c.getColumnIndex("scientificName");
-            int classification = c.getColumnIndex("classification");
-            int imageAsset = c.getColumnIndex("imageAsset");
-            int dangerLevel = c.getColumnIndex("dangerLevel");
-
-            do {
-
-                insects.add(new Insect(c.getString(friendlyName), c.getString(scientificName), c.getString(classification), c.getString(imageAsset), c.getInt(dangerLevel)));
-
-            } while (c.moveToNext());
-        } else {
-
-        }
-
-        if (insects != null) {
-            adapter.setInsects(insects);
-            adapter.notifyDataSetChanged();
-        }
-
-    }
 }

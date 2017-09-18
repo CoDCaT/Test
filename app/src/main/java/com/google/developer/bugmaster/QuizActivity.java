@@ -1,7 +1,10 @@
 package com.google.developer.bugmaster;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.developer.bugmaster.data.Insect;
@@ -10,48 +13,36 @@ import com.google.developer.bugmaster.views.AnswerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuizActivity extends AppCompatActivity implements
-        AnswerView.OnAnswerSelectedListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private static final String TAG = QuizActivity.class.getSimpleName();
+public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnswerSelectedListener {
 
     //Number of quiz answers
     public static final int ANSWER_COUNT = 5;
-
     public static final String EXTRA_INSECTS = "insectList";
     public static final String EXTRA_ANSWER = "selectedInsect";
 
-    private TextView mQuestionText;
-    private TextView mCorrectText;
-    private AnswerView mAnswerSelect;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.text_question) TextView mQuestionText;
+    @BindView(R.id.text_correct) TextView mCorrectText;
+    @BindView(R.id.answer_select) AnswerView mAnswerSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        mQuestionText = (TextView) findViewById(R.id.text_question);
-        mCorrectText = (TextView) findViewById(R.id.text_correct);
-        mAnswerSelect = (AnswerView) findViewById(R.id.answer_select);
+        init();
 
-        mAnswerSelect.setOnAnswerSelectedListener(this);
-
-        List<Insect> insects = getIntent().getParcelableArrayListExtra(EXTRA_INSECTS);
-        Insect selected = getIntent().getParcelableExtra(EXTRA_ANSWER);
-        buildQuestion(insects, selected);
     }
 
-    private void buildQuestion(List<Insect> insects, Insect selected) {
-        String question = getString(R.string.question_text, selected.name);
-        mQuestionText.setText(question);
-
-        //Load answer strings
-        ArrayList<String> options = new ArrayList<>();
-        for (Insect item : insects) {
-            options.add(item.scientificName);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
         }
-
-        mAnswerSelect.loadAnswers(options, selected.name);
+        return super.onOptionsItemSelected(item);
     }
 
     /* Answer Selection Callbacks */
@@ -67,11 +58,46 @@ public class QuizActivity extends AppCompatActivity implements
     }
 
     private void updateResultText() {
-        mCorrectText.setTextColor(mAnswerSelect.isCorrectAnswerSelected() ?
-                getColor(R.color.colorCorrect) : getColor( R.color.colorWrong)
-        );
-        mCorrectText.setText(mAnswerSelect.isCorrectAnswerSelected() ?
-                R.string.answer_correct : R.string.answer_wrong
-        );
+        mCorrectText.setTextColor(mAnswerSelect.isCorrectAnswerSelected() ? ContextCompat.getColor(this, R.color.colorCorrect) : ContextCompat.getColor(this, R.color.colorWrong));
+        mCorrectText.setText(mAnswerSelect.isCorrectAnswerSelected() ? R.string.answer_correct : R.string.answer_wrong);
     }
+
+
+    private void init() {
+        ButterKnife.bind(this);
+
+        setToolbar();
+        setAnswerView();
+        setQuestion();
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    private void setAnswerView() {
+        mAnswerSelect.setOnAnswerSelectedListener(this);
+    }
+
+    private void setQuestion(){
+        List<Insect> insects = getIntent().getParcelableArrayListExtra(EXTRA_INSECTS);
+        Insect selected = getIntent().getParcelableExtra(EXTRA_ANSWER);
+        buildQuestion(insects, selected);
+    }
+
+    private void buildQuestion(List<Insect> insects, Insect selected) {
+        String question = getString(R.string.question_text, selected.name);
+        mQuestionText.setText(question);
+
+        //Load answer strings
+        ArrayList<String> options = new ArrayList<>();
+        for (Insect item : insects) {
+            options.add(item.scientificName);
+        }
+
+        mAnswerSelect.loadAnswers(options, selected.getScientificName());
+    }
+
 }

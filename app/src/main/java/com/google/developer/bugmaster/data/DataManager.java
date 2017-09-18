@@ -7,10 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Singleton that controls access to the SQLiteDatabase instance
- * for this application.
- */
 public class DataManager {
 
     private static DataManager sInstance;
@@ -27,28 +23,15 @@ public class DataManager {
     private BugsDbHelper mBugsDbHelper;
 
     private DataManager(Context context) {
-//        mBugsDbHelper = new BugsDbHelper(context);
-//        mBugsDbHelper.getWritableDatabase();
+        mBugsDbHelper = new BugsDbHelper(context);
     }
 
-    /**
-     * Return a {@link Cursor} that contains every insect in the database.
-     *
-     * @param sortOrder Optional sort order string for the query, can be null
-     * @return {@link Cursor} containing all insect results.
-     */
     public Cursor queryAllInsects(String sortOrder) {
         //TODO: Implement the query
         Cursor c = mBugsDbHelper.getWritableDatabase().query("bugs", null, null, null, null, null, sortOrder);
         return c;
     }
 
-    /**
-     * Return a {@link Cursor} that contains a single insect for the given unique id.
-     *
-     * @param id Unique identifier for the insect record.
-     * @return {@link Cursor} containing the insect result.
-     */
     public Cursor queryInsectsById(int id) {
         //TODO: Implement the query
         return null;
@@ -56,16 +39,20 @@ public class DataManager {
 
     public List<Insect> getAllInsect(String sortOrder){
 
-        SQLiteDatabase db = mBugsDbHelper.getWritableDatabase();
-        Cursor c = db.query(BugsDbHelper.TABLE_NAME, null, null, null, null, null, sortOrder);
+        //TODO: refactor by not main thread and select fields us "String[]"
+
+        SQLiteDatabase db = mBugsDbHelper.getReadableDatabase();
+        Cursor c = db.query(BugsDbContract.bugsEntry.TABLE_NAME, null, null, null, null, null, sortOrder);
+
+        insects = new ArrayList<>();
 
         if (c.moveToFirst()) {
-            insects = new ArrayList<>();
-            int friendlyName = c.getColumnIndex("friendlyName");
-            int scientificName = c.getColumnIndex("scientificName");
-            int classification = c.getColumnIndex("classification");
-            int imageAsset = c.getColumnIndex("imageAsset");
-            int dangerLevel = c.getColumnIndex("dangerLevel");
+
+            int friendlyName = c.getColumnIndex(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME);
+            int scientificName = c.getColumnIndex(BugsDbContract.bugsEntry.COLUMN_NAME_SCIENTIFIC_NAME);
+            int classification = c.getColumnIndex(BugsDbContract.bugsEntry.COLUMN_NAME_CLASSIFICATION);
+            int imageAsset = c.getColumnIndex(BugsDbContract.bugsEntry.COLUMN_NAME_IMAGE);
+            int dangerLevel = c.getColumnIndex(BugsDbContract.bugsEntry.COLUMN_NAME_DANGER_LEVEL);
 
             do {
 
@@ -76,9 +63,7 @@ public class DataManager {
 
         }
 
-
-//        insects.add(new Insect("12", "12", "12", "12", 0));
-
         return insects;
     }
+
 }

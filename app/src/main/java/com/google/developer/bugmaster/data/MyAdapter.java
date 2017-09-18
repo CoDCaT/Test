@@ -1,15 +1,23 @@
 package com.google.developer.bugmaster.data;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.developer.bugmaster.InsectDetailsActivity;
 import com.google.developer.bugmaster.R;
+import com.google.developer.bugmaster.features.DetailActivity;
+import com.google.developer.bugmaster.views.DangerLevelView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.InsectHolder> {
 
@@ -26,25 +34,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.InsectHolder> {
         this.insects = insects;
     }
 
-    public class InsectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public List<Insect> getInsects() {
+        return insects;
+    }
 
-        TextView txtCommonName, txtScientificName;
+    public class InsectHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.txtCommonName) TextView txtCommonName;
+        @BindView(R.id.txtScientificName) TextView txtScientificName;
+        @BindView(R.id.danger_level) DangerLevelView dangerLevelView;
 
         public InsectHolder(View itemView) {
             super(itemView);
 
-            txtCommonName = (TextView) itemView.findViewById(R.id.txtCommonName);
-            txtScientificName = (TextView) itemView.findViewById(R.id.txtScientificName);
-
-        }
-
-        @Override
-        public void onClick(View v) {
+            ButterKnife.bind(this, itemView);
 
         }
     }
-
-    private Cursor mCursor;
 
     @Override
     public InsectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,6 +64,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.InsectHolder> {
 
         holder.txtCommonName.setText(insect.getName());
         holder.txtScientificName.setText(insect.getScientificName());
+        holder.dangerLevelView.setDangerLevel(insect.getDangerLevel());
+        holder.itemView.setOnClickListener(v -> {
+                Insect itemInsect = getItem(holder.getAdapterPosition());
+                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                intent.putExtra("insect", itemInsect);
+                v.getContext().startActivity(intent);
+        });
 
     }
 
@@ -69,8 +82,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.InsectHolder> {
     public Insect getItem(int position) {
         if (position < 0 || position >= getItemCount()) {
             throw new IllegalArgumentException("Item position is out of adapter's range");
-        } else if (mCursor.moveToPosition(position)) {
-            return new Insect(mCursor);
+        } else if (insects.get(position) != null) {
+            return insects.get(position);
         }
         return null;
     }
