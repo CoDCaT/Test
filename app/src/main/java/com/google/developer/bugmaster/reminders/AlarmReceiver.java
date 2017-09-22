@@ -14,6 +14,7 @@ import com.google.developer.bugmaster.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -42,26 +43,30 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent operation = PendingIntent
                 .getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+
         if (enabled) {
             //Gather the time preference
             Calendar startTime = Calendar.getInstance();
+
             try {
                 String alarmPref = preferences.getString(keyAlarm, "12:00");
                 SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                startTime.setTime(format.parse(alarmPref));
+
+                Calendar hour = Calendar.getInstance();
+                hour.setTime(format.parse(alarmPref));
+
+                startTime.set(Calendar.HOUR_OF_DAY, hour.get(Calendar.HOUR_OF_DAY));
+                startTime.set(Calendar.MINUTE, hour.get(Calendar.MINUTE));
+                startTime.set(Calendar.SECOND, hour.get(Calendar.SECOND));
+
             } catch (ParseException e) {
                 Log.w(TAG, "Unable to determine alarm start time", e);
                 return;
             }
 
-            //Start at the preferred time
-            //If that time has passed today, set for tomorrow
-            if (Calendar.getInstance().after(startTime)) {
-                startTime.add(Calendar.DATE, 1);
-            }
 
             Log.d(TAG, "Scheduling quiz reminder alarm");
-            manager.setExact(AlarmManager.RTC, startTime.getTimeInMillis(), operation);
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, startTime.getTimeInMillis(), 24 * 60 * 60000, operation);
         } else {
             Log.d(TAG, "Disabling quiz reminder alarm");
             manager.cancel(operation);

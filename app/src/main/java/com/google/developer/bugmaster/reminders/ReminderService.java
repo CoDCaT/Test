@@ -6,11 +6,21 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.google.developer.bugmaster.QuizActivity;
 import com.google.developer.bugmaster.R;
+import com.google.developer.bugmaster.data.BugsDbContract;
+import com.google.developer.bugmaster.data.DataManager;
+import com.google.developer.bugmaster.data.Insect;
+import com.google.developer.bugmaster.features.MainActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ReminderService extends IntentService {
 
@@ -26,16 +36,41 @@ public class ReminderService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "Quiz reminder event triggered");
 
+        DataManager db = DataManager.getInstance(this);
+
+        Random random = new Random();
+        ArrayList<Insect> randomInsects = new ArrayList<>();
+
+        List<Insect> cursor = db.getAllInsect(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME);
+
+        int insectCount = cursor.size();
+        Random rnd = new Random();
+        Insect insect;
+        int rndNum;
+        for (int i = 0; i < QuizActivity.ANSWER_COUNT; i++) {
+            rndNum = random.nextInt(insectCount);
+            insect = cursor.get(rndNum);
+            randomInsects.add(insect);
+        }
+
         //Present a notification to the user
-        NotificationManager manager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         //Create action intent
         Intent action = new Intent(this, QuizActivity.class);
         //TODO: Add data elements to quiz launch
 
-        PendingIntent operation =
-                PendingIntent.getActivity(this, 0, action, PendingIntent.FLAG_CANCEL_CURRENT);
+        //back---**
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(QuizActivity.class);
+        stackBuilder.addNextIntent(action);
+        //---
+
+        //data----***
+        action.putParcelableArrayListExtra(QuizActivity.EXTRA_INSECTS, randomInsects);
+        action.putExtra(QuizActivity.EXTRA_ANSWER, randomInsects.get(random.nextInt(QuizActivity.ANSWER_COUNT - 1)));
+
+        PendingIntent operation = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification note = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.notification_title))

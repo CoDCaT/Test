@@ -45,6 +45,18 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("selected", mAnswerSelect.getCheckedIndex());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mAnswerSelect.setCheckedIndex(savedInstanceState.getInt("selected"));
+    }
+
     /* Answer Selection Callbacks */
 
     @Override

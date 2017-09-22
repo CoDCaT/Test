@@ -23,7 +23,11 @@
         <activity
             android:name=".QuizActivity"
             android:exported="false"
-            android:parentActivityName=".features.MainActivity" />
+            android:parentActivityName=".features.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".features.MainActivity"/>
+        </activity>
         <activity
             android:name=".InsectDetailsActivity"
             android:exported="false"
@@ -46,7 +50,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".features.DetailActivity"></activity>
+        <activity android:name=".features.DetailActivity">
+
+        </activity>
     </application>
 
 </manifest>
