@@ -1,7 +1,6 @@
 package com.google.developer.bugmaster.data;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 
 import com.google.developer.bugmaster.InsectDetailsActivity;
 import com.google.developer.bugmaster.R;
-import com.google.developer.bugmaster.features.DetailActivity;
 import com.google.developer.bugmaster.views.DangerLevelView;
 
 import java.util.ArrayList;
@@ -67,7 +65,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.InsectHolder> {
         holder.dangerLevelView.setDangerLevel(insect.getDangerLevel());
         holder.itemView.setOnClickListener(v -> {
                 Insect itemInsect = getItem(holder.getAdapterPosition());
-                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                Intent intent = new Intent(v.getContext(), InsectDetailsActivity.class);
                 intent.putExtra("insect", itemInsect);
                 v.getContext().startActivity(intent);
         });

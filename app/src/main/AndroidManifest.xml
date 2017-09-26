@@ -50,9 +50,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".features.DetailActivity">
-
-        </activity>
     </application>
 
 </manifest>
