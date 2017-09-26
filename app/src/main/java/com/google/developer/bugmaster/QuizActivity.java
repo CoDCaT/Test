@@ -22,7 +22,8 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
     public static final int ANSWER_COUNT = 5;
     public static final String EXTRA_INSECTS = "insectList";
     public static final String EXTRA_ANSWER = "selectedInsect";
-
+    private QuizActivityPresenter<QuizMvpView> mPresenter;
+    
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.text_question) TextView mQuestionText;
     @BindView(R.id.text_correct) TextView mCorrectText;
@@ -33,6 +34,8 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        attachPresenter();
+        
         init();
 
     }
@@ -94,27 +97,34 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
     }
 
     private void setQuestion(){
-        List<Insect> insects = getIntent().getParcelableArrayListExtra(EXTRA_INSECTS);
-        Insect selected = getIntent().getParcelableExtra(EXTRA_ANSWER);
-        buildQuestion(insects, selected);
+//         List<Insect> insects = getIntent().getParcelableArrayListExtra(EXTRA_INSECTS);
+//         Insect selected = getIntent().getParcelableExtra(EXTRA_ANSWER);
+//         buildQuestion(insects, selected);
+        
+        mPresenter.onViewInitialized(getIntent());
     }
 
-    private void buildQuestion(List<Insect> insects, Insect selected) {
-        String question = getString(R.string.question_text, selected.name);
-        mQuestionText.setText(question);
+//     private void buildQuestion(List<Insect> insects, Insect selected) {
+//         String question = getString(R.string.question_text, selected.name);
+//         mQuestionText.setText(question);
 
-        //Load answer strings
-        ArrayList<String> options = new ArrayList<>();
-        for (Insect item : insects) {
-            options.add(item.scientificName);
-        }
+//         //Load answer strings
+//         ArrayList<String> options = new ArrayList<>();
+//         for (Insect item : insects) {
+//             options.add(item.scientificName);
+//         }
 
-        mAnswerSelect.loadAnswers(options, selected.getScientificName());
+//         mAnswerSelect.loadAnswers(options, selected.getScientificName());
+//     }
+    
+    private void attachPresenter() {
+        mPresenter = new QuizActivityPresenter<>(this);
     }
     
     @Override
-    void showQuestion(){
-        
+    void showQuestion(String question, ArrayList<String> options, String scientificName){
+        mQuestionText.setText(question);
+        mAnswerSelect.loadAnswers(options, scientificName);
     }
 
 }
