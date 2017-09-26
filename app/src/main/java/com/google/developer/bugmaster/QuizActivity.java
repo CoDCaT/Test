@@ -16,7 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnswerSelectedListener {
+public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnswerSelectedListener implement QuizMvpView {
 
     //Number of quiz answers
     public static final int ANSWER_COUNT = 5;
@@ -110,6 +110,11 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
         }
 
         mAnswerSelect.loadAnswers(options, selected.getScientificName());
+    }
+    
+    @Override
+    void showQuestion(){
+        
     }
 
 }
