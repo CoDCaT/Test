@@ -97,26 +97,9 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
     }
 
     private void setQuestion(){
-//         List<Insect> insects = getIntent().getParcelableArrayListExtra(EXTRA_INSECTS);
-//         Insect selected = getIntent().getParcelableExtra(EXTRA_ANSWER);
-//         buildQuestion(insects, selected);
-        
         mPresenter.onViewInitialized(getIntent());
     }
 
-//     private void buildQuestion(List<Insect> insects, Insect selected) {
-//         String question = getString(R.string.question_text, selected.name);
-//         mQuestionText.setText(question);
-
-//         //Load answer strings
-//         ArrayList<String> options = new ArrayList<>();
-//         for (Insect item : insects) {
-//             options.add(item.scientificName);
-//         }
-
-//         mAnswerSelect.loadAnswers(options, selected.getScientificName());
-//     }
-    
     private void attachPresenter() {
         mPresenter = new QuizActivityPresenter<>(this);
     }
