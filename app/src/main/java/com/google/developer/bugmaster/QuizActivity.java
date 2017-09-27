@@ -1,6 +1,7 @@
 package com.google.developer.bugmaster;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnswerSelectedListener implement QuizMvpView {
+public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnswerSelectedListener, QuizMvpView {
 
     //Number of quiz answers
     public static final int ANSWER_COUNT = 5;
@@ -105,9 +106,33 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
     }
     
     @Override
-    void showQuestion(String question, ArrayList<String> options, String scientificName){
+    public void showQuestion(String question, ArrayList<String> options, String scientificName){
         mQuestionText.setText(question);
         mAnswerSelect.loadAnswers(options, scientificName);
     }
 
+    @Override
+    public boolean isNetworkConnected() {
+        return false;
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void onError(@NonNull String message) {
+
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+
+    }
 }
