@@ -1,0 +1,11 @@
+package com.google.developer.bugmaster;
+
+import com.google.developer.bugmaster.base.BasePresenter;
+
+public class SettingsFragmentPresenter<V extends SettingMvpView> extends BasePresenter<V> implements SettingMvpPresenter<V> {
+
+    public SettingsFragmentPresenter(V mMvpView) {
+        super(mMvpView);
+    }
+
+}
