@@ -6,17 +6,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.google.developer.bugmaster.QuizActivity;
+import com.google.developer.bugmaster.features.quiz.QuizActivity;
 import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.data.BugsDbContract;
 import com.google.developer.bugmaster.data.DataManager;
 import com.google.developer.bugmaster.data.Insect;
-import com.google.developer.bugmaster.features.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;

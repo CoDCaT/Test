@@ -1,8 +1,6 @@
-package com.google.developer.bugmaster;
+package com.google.developer.bugmaster.features.details;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,20 +11,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.developer.bugmaster.data.Insect;
-import com.google.developer.bugmaster.features.MainActivityPresenter;
-
-import java.io.IOException;
-import java.io.InputStream;
+import com.google.developer.bugmaster.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.google.developer.bugmaster.R.id.txtFrandlyName;
-import static com.google.developer.bugmaster.R.id.txtName;
-import static com.google.developer.bugmaster.R2.id.imgDetailBug;
-import static com.google.developer.bugmaster.R2.id.ratingDanger;
-import static com.google.developer.bugmaster.R2.id.txtClassification;
 
 public class InsectDetailsActivity extends AppCompatActivity implements DetailsMvpView {
 

@@ -1,4 +1,4 @@
-package com.google.developer.bugmaster;
+package com.google.developer.bugmaster.features.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.google.developer.bugmaster.reminders.AlarmReceiver;
+import com.google.developer.bugmaster.R;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, SettingMvpView{
 

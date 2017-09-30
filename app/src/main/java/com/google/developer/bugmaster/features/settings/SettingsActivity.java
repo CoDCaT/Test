@@ -1,4 +1,4 @@
-package com.google.developer.bugmaster;
+package com.google.developer.bugmaster.features.settings;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

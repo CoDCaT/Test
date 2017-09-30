@@ -1,8 +1,9 @@
-package com.google.developer.bugmaster;
+package com.google.developer.bugmaster.features.quiz;
 
 import android.content.Context;
 import android.content.Intent;
 
+import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.base.BasePresenter;
 import com.google.developer.bugmaster.data.Insect;
 

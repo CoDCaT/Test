@@ -1,4 +1,4 @@
-package com.google.developer.bugmaster.features;
+package com.google.developer.bugmaster.features.main;
 
 import android.content.Context;
 

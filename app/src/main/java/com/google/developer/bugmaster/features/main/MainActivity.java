@@ -1,30 +1,26 @@
-package com.google.developer.bugmaster.features;
+package com.google.developer.bugmaster.features.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.developer.bugmaster.QuizActivity;
+import com.google.developer.bugmaster.features.quiz.QuizActivity;
 import com.google.developer.bugmaster.R;
-import com.google.developer.bugmaster.SettingsActivity;
+import com.google.developer.bugmaster.features.settings.SettingsActivity;
 import com.google.developer.bugmaster.data.BugsDbContract;
-import com.google.developer.bugmaster.data.DataManager;
 import com.google.developer.bugmaster.data.Insect;
 import com.google.developer.bugmaster.data.MyAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
 import java.util.Random;
 
 import butterknife.BindView;

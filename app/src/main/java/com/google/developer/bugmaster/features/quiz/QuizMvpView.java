@@ -1,4 +1,4 @@
-package com.google.developer.bugmaster;
+package com.google.developer.bugmaster.features.quiz;
 
 import com.google.developer.bugmaster.base.MvpView;
 

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.developer.bugmaster.InsectDetailsActivity;
+import com.google.developer.bugmaster.features.details.InsectDetailsActivity;
 import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.views.DangerLevelView;
 

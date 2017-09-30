@@ -1,4 +1,4 @@
-package com.google.developer.bugmaster;
+package com.google.developer.bugmaster.features.quiz;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,11 +9,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.developer.bugmaster.data.Insect;
+import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.views.AnswerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
