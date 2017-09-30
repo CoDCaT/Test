@@ -2,8 +2,7 @@ package com.google.developer.bugmaster;
 
 import com.google.developer.bugmaster.base.MvpView;
 
-import java.util.ArrayList;
 
 public interface SettingMvpView extends MvpView {
-    
+
 }

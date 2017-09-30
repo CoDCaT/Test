@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.developer.bugmaster.data.Insect;
 import com.google.developer.bugmaster.features.MainActivityPresenter;
@@ -99,7 +100,7 @@ public class InsectDetailsActivity extends AppCompatActivity implements DetailsM
 
     @Override
     public void showMessage(@NonNull String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

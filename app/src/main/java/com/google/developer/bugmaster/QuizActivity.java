@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.developer.bugmaster.data.Insect;
 import com.google.developer.bugmaster.views.AnswerView;
@@ -133,6 +134,6 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
 
     @Override
     public void showMessage(@NonNull String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
