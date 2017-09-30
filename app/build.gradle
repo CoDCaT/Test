@@ -35,7 +35,7 @@ dependencies {
     compile "com.android.support:design:$supportVer"
     compile "com.android.support:preference-v7:$supportVer"
 
-
+    testCompile 'junit:junit:4.12'
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.jakewharton:butterknife:8.8.1'
