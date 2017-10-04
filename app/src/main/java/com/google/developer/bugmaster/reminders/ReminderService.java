@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.google.developer.bugmaster.features.quiz.QuizActivity;
+import com.google.developer.bugmaster.features.quiz_screen.QuizActivity;
 import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.data.BugsDbContract;
 import com.google.developer.bugmaster.data.DataManager;

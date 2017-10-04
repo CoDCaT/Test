@@ -27,7 +27,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.google.developer.bugmaster.features.main.DetailActivity">
+            tools:context="com.google.developer.bugmaster.features.details_insect.DetailActivity">
 
             <ImageView
                 android:id="@+id/imgDetailBug"

@@ -32,7 +32,7 @@
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:orientation="vertical"
-            tools:context="com.google.developer.bugmaster.features.quiz.QuizActivity">
+            tools:context="com.google.developer.bugmaster.features.quiz_screen.QuizActivity">
 
             <TextView
                 android:id="@+id/text_question"
@@ -43,7 +43,7 @@
                 android:gravity="center"
                 tools:text="Question Text" />
 
-            <com.google.developer.bugmaster.views.AnswerView
+            <com.google.developer.bugmaster.customViews.AnswerView
                 android:id="@+id/answer_select"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.google.developer.bugmaster.views.DangerLevelView
+    <com.google.developer.bugmaster.customViews.DangerLevelView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:id="@+id/danger_level"
