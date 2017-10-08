@@ -20,24 +20,21 @@ import com.google.developer.bugmaster.data.Insect;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainMvpView{
 
-    private List<Insect> insects;
     private MainActivityPresenter<MainMvpView> mPresenter;
     private InsectListAdapter adapter;
-    private String sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME;
-    private String sortBy = BugsDbContract.bugsEntry.SORT_BY_ASC;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView rvInsects;
     @BindView(R.id.fab) FloatingActionButton fab;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -47,33 +44,25 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
 
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort:
-                //TODO: Implement the sort action
-                if (sortOrder.equals(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME)) {
-                    sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_DANGER_LEVEL;
-                    sortBy = BugsDbContract.bugsEntry.SORT_BY_DESC;
-                }else {
-                    sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME;
-                    sortBy = BugsDbContract.bugsEntry.SORT_BY_ASC;
-                }
-
-                mPresenter.onViewInitialized(sortOrder + sortBy);
-
+                mPresenter.onClickSortButton();
                 return true;
             case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                mPresenter.onClickSettingMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -91,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
         setFloatingActionButton();
         setRecyclerViewInsects();
 
+        String sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME;
+        String sortBy = BugsDbContract.bugsEntry.SORT_BY_ASC;
         mPresenter.onViewInitialized(sortOrder + sortBy);
     }
 
@@ -124,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
     }
 
     @Override public void onError(@NonNull String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showMessage(@NonNull String message) {
@@ -145,6 +136,12 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
         intent.putExtra(QuizActivity.EXTRA_ANSWER, answerInsect);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void navigateToSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
 }

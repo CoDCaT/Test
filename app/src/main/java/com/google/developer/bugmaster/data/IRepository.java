@@ -9,7 +9,6 @@ public interface IRepository<T> {
     void remove(T item);
     void update(T item);
 
-    List<T> query();
-
+    List<T> query(Specification specification);
 
 }

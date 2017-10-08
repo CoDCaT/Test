@@ -12,4 +12,6 @@ public interface MainMvpView extends MvpView {
     void showInsects(List<Insect> allInsect);
 
     void navigateToQuiz(ArrayList<Insect> insectArrayList, Insect answerInsect);
+
+    void navigateToSettings();
 }

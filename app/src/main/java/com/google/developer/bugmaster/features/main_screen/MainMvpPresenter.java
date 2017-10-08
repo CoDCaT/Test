@@ -8,4 +8,8 @@ interface MainMvpPresenter<V extends MainMvpView> extends MvpPresenter<V> {
     void onViewInitialized(String sort);
 
     void onClickFabButton();
+
+    void onClickSettingMenu();
+
+    void onClickSortButton();
 }
