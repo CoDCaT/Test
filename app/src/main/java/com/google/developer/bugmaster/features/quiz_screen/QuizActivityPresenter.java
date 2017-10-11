@@ -2,6 +2,7 @@ package com.google.developer.bugmaster.features.quiz_screen;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.MenuItem;
 
 import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.base.BasePresenter;
@@ -35,5 +36,12 @@ public class QuizActivityPresenter<V extends QuizMvpView> extends BasePresenter<
         String question = context.getString(R.string.question_text, selected.name);
         
         getMvpView().showQuestion(question, options, selected.getScientificName());
+    }
+
+    @Override
+    public void onClickButtonMenu(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            getMvpView().closeScreen();
+        }
     }
 }

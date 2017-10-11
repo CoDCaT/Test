@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.MenuItem;
 
 import com.google.developer.bugmaster.base.BasePresenter;
 import com.google.developer.bugmaster.data.Insect;
@@ -38,5 +39,12 @@ public class DetailsActivityPresenter<V extends DetailsMvpView> extends BasePres
 
         String classification = String.format("Classification: %1$s", insect.getClassification());
         getMvpView().showDetails(bitmap, insect.getName(), insect.getScientificName(), classification, insect.getDangerLevel());
+    }
+
+    @Override
+    public void onClickButtonMenu(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            getMvpView().closeScreen();
+        }
     }
 }

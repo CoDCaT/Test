@@ -1,15 +1,18 @@
 package com.google.developer.bugmaster.features.main_screen;
 
 
+import android.content.Context;
+import android.view.MenuItem;
+
 import com.google.developer.bugmaster.base.MvpPresenter;
 
 interface MainMvpPresenter<V extends MainMvpView> extends MvpPresenter<V> {
 
-    void onViewInitialized(String sort);
+    void onViewInitialized();
 
     void onClickFabButton();
 
-    void onClickSettingMenu();
+    void onClickButtonMenu(MenuItem item);
 
-    void onClickSortButton();
+
 }

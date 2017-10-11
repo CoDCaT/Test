@@ -57,16 +57,8 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_sort:
-                mPresenter.onClickSortButton();
-                return true;
-            case R.id.action_settings:
-                mPresenter.onClickSettingMenu();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        mPresenter.onClickButtonMenu(item);
+        return true;
     }
 
     private void attachPresenter() {
@@ -80,9 +72,7 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
         setFloatingActionButton();
         setRecyclerViewInsects();
 
-        String sortOrder = BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME;
-        String sortBy = BugsDbContract.bugsEntry.SORT_BY_ASC;
-        mPresenter.onViewInitialized(sortOrder + sortBy);
+        mPresenter.onViewInitialized();
     }
 
     private void setRecyclerViewInsects() {

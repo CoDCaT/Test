@@ -43,9 +43,7 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-        }
+        mPresenter.onClickButtonMenu(item);
         return super.onOptionsItemSelected(item);
     }
 
@@ -109,6 +107,11 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
     public void showQuestion(String question, ArrayList<String> options, String scientificName){
         mQuestionText.setText(question);
         mAnswerSelect.loadAnswers(options, scientificName);
+    }
+
+    @Override
+    public void closeScreen() {
+        finish();
     }
 
     @Override

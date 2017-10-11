@@ -9,4 +9,5 @@ public interface DetailsMvpView extends MvpView {
 
     void showDetails(Bitmap bitmap, String name, String scientificName, String classification, int dangerLevel);
 
+    void closeScreen();
 }

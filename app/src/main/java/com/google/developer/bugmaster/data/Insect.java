@@ -3,8 +3,9 @@ package com.google.developer.bugmaster.data;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-public final class Insect implements Parcelable {
+public final class Insect implements Parcelable, Comparable<Insect> {
 
     private static final String TAG = Insect.class.getSimpleName();
 
@@ -97,5 +98,10 @@ public final class Insect implements Parcelable {
 
     public int getDangerLevel() {
         return dangerLevel;
+    }
+
+    @Override
+    public int compareTo(@NonNull Insect o) {
+        return o.getDangerLevel()-this.getDangerLevel();
     }
 }
