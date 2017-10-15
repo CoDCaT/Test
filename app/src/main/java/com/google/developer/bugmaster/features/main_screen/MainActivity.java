@@ -21,13 +21,16 @@ import com.google.developer.bugmaster.data.Insect;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainMvpView{
 
-    private MainActivityPresenter<MainMvpView> mPresenter;
     private InsectListAdapter adapter;
+
+    @Inject MainActivityPresenter<MainMvpView> mPresenter;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView rvInsects;
