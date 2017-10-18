@@ -12,6 +12,8 @@ public class DataManager {
     private static DataManager sInstance;
     private List<Insect> insects;
 
+    private BugsDbHelper mBugsDbHelper;
+
     public static synchronized DataManager getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new DataManager(context.getApplicationContext());
@@ -20,21 +22,8 @@ public class DataManager {
         return sInstance;
     }
 
-    private BugsDbHelper mBugsDbHelper;
-
     private DataManager(Context context) {
         mBugsDbHelper = new BugsDbHelper(context);
-    }
-
-    public Cursor queryAllInsects(String sortOrder) {
-        //TODO: Implement the query
-        Cursor c = mBugsDbHelper.getWritableDatabase().query("bugs", null, null, null, null, null, sortOrder);
-        return c;
-    }
-
-    public Cursor queryInsectsById(int id) {
-        //TODO: Implement the query
-        return null;
     }
 
     public List<Insect> getAllInsect(String sortOrder){

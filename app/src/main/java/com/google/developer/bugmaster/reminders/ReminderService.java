@@ -10,6 +10,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.google.developer.bugmaster.App;
+import com.google.developer.bugmaster.data.repository.AppRepository;
+import com.google.developer.bugmaster.data.repository.IRepository;
 import com.google.developer.bugmaster.features.quiz_screen.QuizActivity;
 import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.data.BugsDbContract;
@@ -22,32 +25,38 @@ import java.util.Random;
 
 public class ReminderService extends IntentService {
 
-    private static final String TAG = ReminderService.class.getSimpleName();
+    private IRepository repository;
 
+    private static final String TAG = ReminderService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
+
 
     public ReminderService() {
         super(TAG);
     }
 
+    @Override public void onCreate() {
+        super.onCreate();
+        repository = App.appRepository;
+    }
+
+
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "Quiz reminder event triggered");
 
-        DataManager db = DataManager.getInstance(this);
-
         Random random = new Random();
         ArrayList<Insect> randomInsects = new ArrayList<>();
 
-        List<Insect> cursor = db.getAllInsect(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME);
+        List<Insect> insects = repository.getAllInsect(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME);
 
-        int insectCount = cursor.size();
+        int insectCount = insects.size();
         Random rnd = new Random();
         Insect insect;
         int rndNum;
         for (int i = 0; i < QuizActivity.ANSWER_COUNT; i++) {
             rndNum = random.nextInt(insectCount);
-            insect = cursor.get(rndNum);
+            insect = insects.get(rndNum);
             randomInsects.add(insect);
         }
 
