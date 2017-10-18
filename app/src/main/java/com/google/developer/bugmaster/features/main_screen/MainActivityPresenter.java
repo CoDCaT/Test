@@ -7,7 +7,6 @@ import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.base.BasePresenter;
 import com.google.developer.bugmaster.data.Insect;
 import com.google.developer.bugmaster.data.specification.InsectsSqlSpecification;
-import com.google.developer.bugmaster.data.repository.SqlRepository;
 import com.google.developer.bugmaster.features.quiz_screen.QuizActivity;
 
 import java.util.ArrayList;
