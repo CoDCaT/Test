@@ -1,7 +1,6 @@
 package com.google.developer.bugmaster.features.details_insect;
 
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.view.MenuItem;
 

@@ -3,7 +3,6 @@ package com.google.developer.bugmaster.features.details_insect;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -13,12 +12,15 @@ import android.widget.Toast;
 
 import com.google.developer.bugmaster.R;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class InsectDetailsActivity extends AppCompatActivity implements DetailsMvpView {
+public class InsectDetailsActivity extends DaggerAppCompatActivity implements DetailsMvpView {
 
-    private DetailsActivityPresenter<DetailsMvpView> mPresenter;
+    @Inject DetailsActivityPresenter<DetailsMvpView> mPresenter;
 
     @BindView(R.id.imgDetailBug) ImageView imgDetailBug;
     @BindView(R.id.txtFrandlyName) TextView txtFrandlyName;
@@ -31,8 +33,6 @@ public class InsectDetailsActivity extends AppCompatActivity implements DetailsM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        attachPresenter();
 
         init();
     }
@@ -59,10 +59,6 @@ public class InsectDetailsActivity extends AppCompatActivity implements DetailsM
     private void setToolbar(){
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void attachPresenter() {
-        mPresenter = new DetailsActivityPresenter<>(this);
     }
 
     @Override

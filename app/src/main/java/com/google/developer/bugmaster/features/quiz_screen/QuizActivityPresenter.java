@@ -11,11 +11,14 @@ import com.google.developer.bugmaster.data.Insect;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 
 public class QuizActivityPresenter<V extends QuizMvpView> extends BasePresenter<V> implements QuizMvpPresenter<V> {
 
     Context context;
 
+    @Inject
     public QuizActivityPresenter(V mMvpView) {
         super(mMvpView);
         this.context = (Context) mMvpView;

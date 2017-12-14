@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 import com.google.developer.bugmaster.features.quiz_screen.QuizActivity;
 import com.google.developer.bugmaster.R;
 import com.google.developer.bugmaster.features.settings.SettingsActivity;
-import com.google.developer.bugmaster.data.BugsDbContract;
 import com.google.developer.bugmaster.data.Insect;
 
 import java.util.ArrayList;
@@ -25,10 +23,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements MainMvpView{
-
-    private InsectListAdapter adapter;
+public class MainActivity extends DaggerAppCompatActivity implements MainMvpView{
 
     @Inject MainActivityPresenter<MainMvpView> mPresenter;
 
@@ -36,12 +33,12 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
     @BindView(R.id.recycler_view) RecyclerView rvInsects;
     @BindView(R.id.fab) FloatingActionButton fab;
 
+    private InsectListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        attachPresenter();
 
         init();
 
@@ -62,10 +59,6 @@ public class MainActivity extends AppCompatActivity implements MainMvpView{
     public boolean onOptionsItemSelected(MenuItem item) {
         mPresenter.onClickButtonMenu(item);
         return true;
-    }
-
-    private void attachPresenter() {
-        mPresenter = new MainActivityPresenter<>(this);
     }
 
     private void init() {

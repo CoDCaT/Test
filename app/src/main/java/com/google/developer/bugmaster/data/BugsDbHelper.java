@@ -19,6 +19,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+
 public class BugsDbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = BugsDbHelper.class.getSimpleName();
@@ -29,6 +33,7 @@ public class BugsDbHelper extends SQLiteOpenHelper {
 
     private Resources mResources;
 
+    @Inject
     public BugsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mResources = context.getResources();

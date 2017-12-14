@@ -8,15 +8,19 @@ import android.widget.Toast;
 
 import com.google.developer.bugmaster.R;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, SettingMvpView{
 
-    private SettingsFragmentPresenter<SettingMvpView> mPresenter;
+    @Inject SettingsFragmentPresenter<SettingMvpView> mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        attachPresenter();
+        //TODO: cus DaggerPreferenceFragment is absent
+        AndroidInjection.inject(this);
 
         addPreferencesFromResource(R.xml.preferences);
     }
@@ -35,15 +39,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        AlarmReceiver.scheduleAlarm(getActivity());
         mPresenter.runService(getActivity());
     }
 
-    //MVP---***
-
-    private void attachPresenter() {
-        mPresenter = new SettingsFragmentPresenter<>(this);
-    }
 
     @Override
     public boolean isNetworkConnected() {

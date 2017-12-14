@@ -11,12 +11,9 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.google.developer.bugmaster.App;
-import com.google.developer.bugmaster.data.repository.AppRepository;
 import com.google.developer.bugmaster.data.repository.IRepository;
 import com.google.developer.bugmaster.features.quiz_screen.QuizActivity;
 import com.google.developer.bugmaster.R;
-import com.google.developer.bugmaster.data.BugsDbContract;
-import com.google.developer.bugmaster.data.DataManager;
 import com.google.developer.bugmaster.data.Insect;
 
 import java.util.ArrayList;
@@ -37,7 +34,7 @@ public class ReminderService extends IntentService {
 
     @Override public void onCreate() {
         super.onCreate();
-        repository = App.appRepository;
+        repository = App.getApp().getAppRepository();
     }
 
 
@@ -48,7 +45,7 @@ public class ReminderService extends IntentService {
         Random random = new Random();
         ArrayList<Insect> randomInsects = new ArrayList<>();
 
-        List<Insect> insects = repository.getAllInsect(BugsDbContract.bugsEntry.COLUMN_NAME_FRIENDLY_NAME);
+        List<Insect> insects = repository.getAllInsect();
 
         int insectCount = insects.size();
         Random rnd = new Random();

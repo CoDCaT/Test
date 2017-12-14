@@ -1,7 +1,6 @@
 package com.google.developer.bugmaster.features.main_screen;
 
 
-import android.content.Context;
 import android.view.MenuItem;
 
 import com.google.developer.bugmaster.base.MvpPresenter;

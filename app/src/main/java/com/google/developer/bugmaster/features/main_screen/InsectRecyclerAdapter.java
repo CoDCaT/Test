@@ -7,10 +7,6 @@ import android.view.ViewGroup;
 
 import com.google.developer.bugmaster.data.Insect;
 
-/**
- * RecyclerView adapter extended with project-specific required methods.
- */
-
 public class InsectRecyclerAdapter extends
         RecyclerView.Adapter<InsectRecyclerAdapter.InsectHolder> {
 
