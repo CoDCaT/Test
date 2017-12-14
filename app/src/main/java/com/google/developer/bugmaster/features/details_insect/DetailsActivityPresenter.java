@@ -13,10 +13,13 @@ import com.google.developer.bugmaster.data.Insect;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.inject.Inject;
+
 public class DetailsActivityPresenter<V extends DetailsMvpView> extends BasePresenter<V> implements DetailsMvpPresenter<V> {
 
     Context context;
 
+    @Inject
     public DetailsActivityPresenter(V mMvpView) {
         super(mMvpView);
         this.context = (Context) mMvpView;

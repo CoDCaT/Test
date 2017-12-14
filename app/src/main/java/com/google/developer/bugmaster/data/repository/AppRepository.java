@@ -13,28 +13,33 @@ import com.google.developer.bugmaster.data.Insect;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import static android.content.Context.MODE_PRIVATE;
 
+@Singleton
 public class AppRepository implements IRepository{
 
     private String PREFERENCES_FILE = "PREFERENCES_FILE";
 
     private List<Insect> insects;
     private SharedPreferences preferences;
-    private BugsDbHelper mBugsDbHelper;
+    BugsDbHelper mBugsDbHelper;
 
-
-    public AppRepository(Context context) {
-        mBugsDbHelper = new BugsDbHelper(context);
+    @Inject
+    public AppRepository(Context context, BugsDbHelper mBugsDbHelper) {
+//        mBugsDbHelper = new BugsDbHelper(context);
+        this.mBugsDbHelper = mBugsDbHelper;
         preferences = context.getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE);
     }
 
-    public List<Insect> getAllInsect(String sortOrder){
+    public List<Insect> getAllInsect(){
 
         //TODO: refactor by not main thread and select fields us "String[]"
 
         SQLiteDatabase db = mBugsDbHelper.getReadableDatabase();
-        Cursor c = db.query(BugsDbContract.bugsEntry.TABLE_NAME, null, null, null, null, null, sortOrder);
+        Cursor c = db.query(BugsDbContract.bugsEntry.TABLE_NAME, null, null, null, null, null, null);
 
         insects = new ArrayList<>();
 
@@ -57,5 +62,21 @@ public class AppRepository implements IRepository{
 
         return insects;
     }
+
+    @Override
+    public List<Insect> getCurrentInsect() {
+        return insects;
+    }
+
+    @Override
+    public String readFromPreference(String key) {
+        return preferences.getString(key, "name");
+    }
+
+    @Override
+    public void saveToPreference(String value) {
+        preferences.edit().putString("sort", value).apply();
+    }
+
 
 }

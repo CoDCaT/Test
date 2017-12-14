@@ -1,31 +1,34 @@
 package com.google.developer.bugmaster.di;
 
 
-import com.google.developer.bugmaster.features.details_insect.DetailsActivityPresenter;
-import com.google.developer.bugmaster.features.details_insect.DetailsMvpView;
-import com.google.developer.bugmaster.features.main_screen.MainActivityPresenter;
-import com.google.developer.bugmaster.features.main_screen.MainMvpView;
-import com.google.developer.bugmaster.features.quiz_screen.QuizActivityPresenter;
-import com.google.developer.bugmaster.features.quiz_screen.QuizMvpView;
-import com.google.developer.bugmaster.features.settings.SettingMvpView;
-import com.google.developer.bugmaster.features.settings.SettingsFragmentPresenter;
+import android.app.Application;
+
+import com.google.developer.bugmaster.App;
+import com.google.developer.bugmaster.data.repository.AppModule;
 
 import javax.inject.Singleton;
-
+import dagger.BindsInstance;
 import dagger.Component;
+
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjectionModule;
 
 @Singleton
 @Component(
         modules = {
-                AppModule.class,
+                ActivityBindingModule.class,
+                AndroidSupportInjectionModule.class,
+                AppModule.class
         }
 )
+public interface AppComponent extends AndroidInjector<App> {
 
-public interface AppComponent {
+    @Component.Builder
+    interface Builder {
 
-    void inject(MainActivityPresenter<MainMvpView> presenter);
-    void inject(DetailsActivityPresenter<DetailsMvpView> presenter);
-    void inject(QuizActivityPresenter<QuizMvpView> presenter);
-    void inject(SettingsFragmentPresenter<SettingMvpView> presenter);
+        @BindsInstance
+        AppComponent.Builder application(Application application);
 
+        AppComponent build();
+    }
 }

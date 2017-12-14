@@ -3,12 +3,6 @@ package com.google.developer.bugmaster.reminders;
 import android.app.AlarmManager;
 import android.content.Context;
 
-/**
- * Interface to provide access to an {@link AlarmManager} instance that can be configured
- * during automated unit tests.
- *
- * NO MODIFICATIONS SHOULD BE MADE TO THIS CLASS OR ITS USAGE.
- */
 public class AlarmManagerProvider {
     private static AlarmManager sAlarmManager;
 

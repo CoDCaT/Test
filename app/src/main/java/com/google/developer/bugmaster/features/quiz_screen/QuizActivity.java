@@ -14,16 +14,19 @@ import com.google.developer.bugmaster.customViews.AnswerView;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnswerSelectedListener, QuizMvpView {
+public class QuizActivity extends DaggerAppCompatActivity implements AnswerView.OnAnswerSelectedListener, QuizMvpView {
 
     //Number of quiz answers
     public static final int ANSWER_COUNT = 5;
     public static final String EXTRA_INSECTS = "insectList";
     public static final String EXTRA_ANSWER = "selectedInsect";
-    private QuizActivityPresenter<QuizMvpView> mPresenter;
+    @Inject QuizActivityPresenter<QuizMvpView> mPresenter;
     
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.text_question) TextView mQuestionText;
@@ -35,8 +38,6 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        attachPresenter();
-        
         init();
 
     }
@@ -99,10 +100,7 @@ public class QuizActivity extends AppCompatActivity implements AnswerView.OnAnsw
         mPresenter.onViewInitialized(getIntent());
     }
 
-    private void attachPresenter() {
-        mPresenter = new QuizActivityPresenter<>(this);
-    }
-    
+
     @Override
     public void showQuestion(String question, ArrayList<String> options, String scientificName){
         mQuestionText.setText(question);
